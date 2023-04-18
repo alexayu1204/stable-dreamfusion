@@ -265,30 +265,9 @@ def parse_args():
 if __name__ == '__main__':
     args = parse_args()
     
-    json_path = "s3://jerry-3d-object-generation/params/parameters.json"
-    # Read parameters.json file from S3
-    s3 = boto3.resource('s3')
-    s3_bucket, s3_key = json_path.replace('s3://', '').split('/', 1)
-    obj = s3.Object(s3_bucket, s3_key)
-    params = json.loads(obj.get()['Body'].read().decode('utf-8'))
-
-    print("params", params)
-
-    for key, value in params.items():
-        if hasattr(args, key):
-            setattr(args, key, value)
-
+    print(args)
     print("text: ", args.text)
     print("O: ", args.O)
     print("iters: ", args.iters)
-
-    # text_dir = params.get('text', args.text)
-
-    # with open(text_dir, 'r') as f:
-    #     all_text = f.read()
-    
-    # args.text = all_text.split("\n")[0]
-
-    print('Final hyperparameters:', args)
 
     train(args)
